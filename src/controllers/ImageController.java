@@ -5,6 +5,7 @@ import models.ImageModel;
 import models.RectangleModel;
 import views.ImagePanel;
 import views.MainFrame;
+import models.LineModel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -85,7 +86,15 @@ public class ImageController {
      * Kopiuje obraz z prawego panelu do lewego panelu.
      */
     public void copyRightPanel() {
+        if (rightPanel.getModel() == null) {
+            return;
+        }
         // TODO: Zaimplementować metodę kopiowania obrazu z panelu prawego do panelu lewego.
+        var image = rightPanel.getModel().getCopyImage();
+        var model = new ImageModel(image);
+
+        leftPanel.setModel(model);
+        leftPanel.repaint();
     }
 
     /**
@@ -118,5 +127,37 @@ public class ImageController {
      */
     public void drawRectangle(RectangleModel rectangle) {
         // TODO: Zaimplementować rysowanie prostokąta na obrazie.
+        if(leftPanel.getModel() == null || leftPanel.getModel().getImage() == null) {
+            JOptionPane.showMessageDialog(mainFrame, "Brak załadowanego obrazu!", "Błąd",JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        var image = leftPanel.getModel().getCopyImage();
+
+        var model = new ImageModel(image);
+        model.drawRectangle(rectangle);
+
+        rightPanel.setModel(model);
+        rightPanel.repaint();
+    }
+
+    public void drawHorizontaLines(LineModel line){
+        if(leftPanel.getModel() == null || leftPanel.getModel().getImage() == null) {
+            JOptionPane.showMessageDialog(mainFrame, "Brak załadowanego obrazu!", "Błąd",JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        var image = leftPanel.getModel().getCopyImage();
+
+        var model = new ImageModel(image);
+        int y = 0;
+
+        for(int i = 1;i <= line.getNumberLine();i++) {
+            RectangleModel rect = new RectangleModel(0,y,leftPanel.getWidth(),5,line.getColor());
+            model.drawRectangle(rect);
+            rightPanel.setModel(model);
+            rightPanel.repaint();
+            y += line.getSpaceLine();
+        }
+
+
     }
 }

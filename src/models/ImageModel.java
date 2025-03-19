@@ -88,6 +88,13 @@ public class ImageModel {
      */
     public void drawRectangle(RectangleModel rectangle) {
         // TODO: Implementacja metody rysowania prostokąta.
+        if(image != null) {
+            Graphics2D g2d = image.createGraphics();
+            g2d.drawImage(image, 0, 0, null);
+            g2d.setColor(rectangle.getColor());
+            g2d.fillRect(rectangle.getStartX(), rectangle.getStartY(), rectangle.getWidth(), rectangle.getHeight());
+            g2d.dispose();
+        }
     }
 }
 

@@ -41,7 +41,7 @@ public class RectangleDialog extends JDialog {
 
     private JPanel getMainPanel() {
         // TODO: Utwórz panel i dodaj do niego etykiety oraz pola tekstowe.
-        JPanel panel = new JPanel(new GridLayout(5,2,10,10));
+        JPanel panel = new JPanel(new GridLayout(5,2,5,5));
         panel.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
 
         panel.add(new JLabel("Start X :"));

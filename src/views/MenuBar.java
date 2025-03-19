@@ -22,9 +22,12 @@ public class MenuBar extends JMenuBar {
 
     private final JMenuItem clearRightPanelMenuItem;
     // TODO: Dodać opcję menu umożliwiającą skopiowanie obrazu z prawego panelu do lewego panelu.
-
+    private final JMenuItem copyRightPanelMenuItem;
     private final JMenuItem drawCircleMenuItem;
-    // TODO: Dodać opcję menu umożliwiającą narysowanie prostokąta na obrazie.
+    // TODO: Dodać opcję menu umożliwiającą narysowanie prostokąta na obrazie.\
+    private final JMenuItem drawRectangleMenuItem;
+
+    private final JMenuItem drawHorizontalLinesMenuItem;
 
     public MenuBar() {
         // Tworzenie głównych menu
@@ -45,10 +48,13 @@ public class MenuBar extends JMenuBar {
         // Menu Panel prawy
         clearRightPanelMenuItem = new JMenuItem("Wyczyść");
         // TODO: Dodać nowy element menu kopiowania prawego panelu.
-
+        copyRightPanelMenuItem = new JMenuItem("Kopiuj obraz");
         // Menu Edycja
         drawCircleMenuItem = new JMenuItem("Narysuj koło");
         // TODO: Dodać nowy element menu rysowania prostokąta.
+        drawRectangleMenuItem = new JMenuItem("Narysuj prostokąt");
+
+        drawHorizontalLinesMenuItem =new JMenuItem("Narysuj linie poziome");
 
         // Dodanie elementów do menu Plik
         fileMenu.add(openFileMenuItem);
@@ -63,10 +69,13 @@ public class MenuBar extends JMenuBar {
         // Dodanie elementów do menu Panel prawy
         rightPanelMenu.add(clearRightPanelMenuItem);
         // TODO: Dodać nowy element menu kopiowania prawego panelu.
-
+        rightPanelMenu.add(copyRightPanelMenuItem);
         // Dodanie elementów do menu Edycja
         editPanelMenu.add(drawCircleMenuItem);
         // TODO: Dodać nowy element menu rysowania prostokąta.
+        editPanelMenu.add(drawRectangleMenuItem);
+
+        editPanelMenu.add(drawHorizontalLinesMenuItem);
 
         // Dodawanie wszystkich menu do paska menu
         add(fileMenu);
@@ -102,6 +111,12 @@ public class MenuBar extends JMenuBar {
     public JMenuItem getDrawCircleMenuItem() {
         return drawCircleMenuItem;
     }
+
+    public JMenuItem getDrawRectangleMenuItem() {return drawRectangleMenuItem;}
+
+    public JMenuItem getDrawHorizontalLinesMenuItem() {return drawHorizontalLinesMenuItem;}
+
+    public JMenuItem getCopyRightPanelMenuItem() {return copyRightPanelMenuItem;}
 
     // TODO: Dodać metody getter dla nowych elementów menu.
 }

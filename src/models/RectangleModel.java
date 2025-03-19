@@ -27,13 +27,7 @@ public class RectangleModel {
 
     private final Color color;
 
-    public RectangleModel() {
-        this.startX = 0;
-        this.startY = 0;
-        this.width = 0;
-        this.height = 0;
-        this.color = Color.BLACK;
-    }
+
 
     /**
      * TODO: Należy dodać konstruktor z parametrami, aby można było tworzyć obiekt z określonymi wymiarami i kolorem.

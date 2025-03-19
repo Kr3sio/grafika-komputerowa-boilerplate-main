@@ -3,6 +3,8 @@ package views;
 import controllers.FileController;
 import controllers.ImageController;
 import models.CircleModel;
+import models.LineModel;
+import models.RectangleModel;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -131,10 +133,12 @@ public class MainFrame extends JFrame {
 
         menuBar.getClearRightPanelMenuItem().addActionListener(_ -> imageController.clearRightPanel());
         // TODO: Dodać nasłuch na opcję kopiowania obrazu z prawego panelu do lewego panelu. W addActionListener należy wywołać metodę copyRightPanel() z kontrolera ImageController.
-
+        menuBar.getCopyRightPanelMenuItem().addActionListener(_ -> imageController.copyRightPanel());
         menuBar.getDrawCircleMenuItem().addActionListener(_ -> showCircleDialog());
         // TODO: Dodać nasłuch na opcję rysowania prostokąta. W addActionListener należy wywołać metodę showRectangleDialog().
+        menuBar.getDrawRectangleMenuItem().addActionListener(_ -> showRectangleDialog());
 
+        menuBar.getDrawHorizontalLinesMenuItem().addActionListener(_ -> showLineDialog());
     }
 
     /**
@@ -142,6 +146,22 @@ public class MainFrame extends JFrame {
      */
     private void showRectangleDialog() {
         // TODO: Wyświetlić okno dialogowe z formularzem dla parametrów prostokąta. Wywołać metodę kontrolera drawRectangle().
+        RectangleDialog dialog = new RectangleDialog(this);
+        dialog.setVisible(true);
+        RectangleModel rect = dialog.getRectangle();
+
+        if(rect != null) {
+            imageController.drawRectangle(rect);
+        }
+    }
+
+    private void showLineDialog() {
+        LineDialog dialog = new LineDialog(this);
+        dialog.setVisible(true);
+        LineModel line = dialog.getLine();
+        if(line != null) {
+            imageController.drawHorizontaLines(line);
+        }
     }
 
     /**
