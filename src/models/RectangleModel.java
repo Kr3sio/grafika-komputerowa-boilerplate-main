@@ -41,6 +41,13 @@ public class RectangleModel {
      *      ...
      * }
      */
+    public RectangleModel(Integer startX, Integer startY, Integer width, Integer height, Color color){
+        this.startX = startX;
+        this.startY = startY;
+        this.width = width;
+        this.height = height;
+        this.color = color;
+    }
 
     public Color getColor() {
         return color;
