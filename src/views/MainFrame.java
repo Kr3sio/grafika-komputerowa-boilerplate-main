@@ -141,6 +141,8 @@ public class MainFrame extends JFrame {
         menuBar.getDrawHorizontalLinesMenuItem().addActionListener(_ -> showLineHDialog());
 
         menuBar.getDrawVerticalLinesMenuItem().addActionListener(_ -> showLineVDialog());
+
+        menuBar.getConvertToGreyMenuItem().addActionListener(_ -> imageController.ConvertGrey());
     }
 
     /**
@@ -174,6 +176,7 @@ public class MainFrame extends JFrame {
             imageController.drawVerticalLines(line);
         }
     }
+
 
     /**
      * Metoda otwiera okno dialogowe umożliwiające użytkownikowi wprowadzenie parametrów koła, który zostanie narysowane na wczytanym obrazie.

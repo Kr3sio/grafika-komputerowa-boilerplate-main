@@ -11,6 +11,8 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.awt.image.BufferedImage;
+import java.awt.Color;
 
 /**
  * Kontroler odpowiedzialny za zarządzanie operacjami na obrazach w aplikacji.
@@ -181,6 +183,38 @@ public class ImageController {
 
 
     }
+
+    public void ConvertGrey(){
+        if(leftPanel.getModel() == null || leftPanel.getModel().getImage() == null) {
+            JOptionPane.showMessageDialog(mainFrame, "Brak załadowanego obrazu!", "Błąd",JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        var image = leftPanel.getModel().getCopyImage();
+        Integer width = image.getWidth();
+        Integer height = image.getHeight();
+        var grayscaleimage = leftPanel.getModel().getCopyImage();
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                Color color = new Color(image.getRGB(x, y));
+
+                int red = color.getRed();
+                int green = color.getGreen();
+                int blue = color.getBlue();
+
+                int grayValue = (int) (0.3 * red + 0.59 * green + 0.11 * blue);
+                Color grayColor = new Color(grayValue, grayValue, grayValue);
+
+                grayscaleimage.setRGB(x, y, grayColor.getRGB());
+            }
+
+        }
+
+        rightPanel.setModel(new ImageModel(grayscaleimage));
+        rightPanel.repaint();
+    }
+
+
 
 
 }
