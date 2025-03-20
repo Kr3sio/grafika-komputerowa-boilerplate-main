@@ -138,7 +138,9 @@ public class MainFrame extends JFrame {
         // TODO: Dodać nasłuch na opcję rysowania prostokąta. W addActionListener należy wywołać metodę showRectangleDialog().
         menuBar.getDrawRectangleMenuItem().addActionListener(_ -> showRectangleDialog());
 
-        menuBar.getDrawHorizontalLinesMenuItem().addActionListener(_ -> showLineDialog());
+        menuBar.getDrawHorizontalLinesMenuItem().addActionListener(_ -> showLineHDialog());
+
+        menuBar.getDrawVerticalLinesMenuItem().addActionListener(_ -> showLineVDialog());
     }
 
     /**
@@ -155,12 +157,21 @@ public class MainFrame extends JFrame {
         }
     }
 
-    private void showLineDialog() {
+    private void showLineHDialog() {
         LineDialog dialog = new LineDialog(this);
         dialog.setVisible(true);
         LineModel line = dialog.getLine();
         if(line != null) {
             imageController.drawHorizontaLines(line);
+        }
+    }
+
+    private void showLineVDialog() {
+        LineDialog dialog = new LineDialog(this);
+        dialog.setVisible(true);
+        LineModel line = dialog.getLine();
+        if(line != null) {
+            imageController.drawVerticalLines(line);
         }
     }
 

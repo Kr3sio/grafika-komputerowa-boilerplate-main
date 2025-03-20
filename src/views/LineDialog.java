@@ -9,6 +9,7 @@ import java.awt.*;
 public class LineDialog extends JDialog {
     private final JTextField numberLine = new JTextField("10");
     private final JTextField spaceLine = new JTextField("60");
+    private final JTextField fat = new JTextField("5");
     private Color selectedColor = Color.BLACK;
     private boolean confirmed = false;
 
@@ -26,13 +27,15 @@ public class LineDialog extends JDialog {
     }
 
     public JPanel getMainPanel() {
-        JPanel panel = new JPanel(new GridLayout(3,2,10,10));
+        JPanel panel = new JPanel(new GridLayout(4,2,10,10));
         panel.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
 
         panel.add(new JLabel("Ilość linii:"));
         panel.add(numberLine);
         panel.add(new JLabel("Odstęp"));
         panel.add(spaceLine);
+        panel.add(new JLabel("Grubość"));
+        panel.add(fat);
 
         JButton colorButton = new JButton("Wybierz kolor");
         colorButton.setBackground(selectedColor);
@@ -73,6 +76,7 @@ public class LineDialog extends JDialog {
         if(confirmed){
             return new LineModel(parseField(numberLine),
                     parseField(spaceLine),
+                    parseField(fat),
                     selectedColor);
         }
         return null;

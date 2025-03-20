@@ -151,7 +151,7 @@ public class ImageController {
         int y = 0;
 
         for(int i = 1;i <= line.getNumberLine();i++) {
-            RectangleModel rect = new RectangleModel(0,y,leftPanel.getWidth(),5,line.getColor());
+            RectangleModel rect = new RectangleModel(0,y,leftPanel.getWidth(),line.getFat(),line.getColor());
             model.drawRectangle(rect);
             rightPanel.setModel(model);
             rightPanel.repaint();
@@ -160,4 +160,27 @@ public class ImageController {
 
 
     }
+
+    public void drawVerticalLines(LineModel line){
+        if(leftPanel.getModel() == null || leftPanel.getModel().getImage() == null) {
+            JOptionPane.showMessageDialog(mainFrame, "Brak załadowanego obrazu!", "Błąd",JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        var image = leftPanel.getModel().getCopyImage();
+
+        var model = new ImageModel(image);
+        int x = 0;
+
+        for(int i = 1;i <= line.getNumberLine();i++) {
+            RectangleModel rect = new RectangleModel(x,0,line.getFat(),rightPanel.getHeight(),line.getColor());
+            model.drawRectangle(rect);
+            rightPanel.setModel(model);
+            rightPanel.repaint();
+            x += line.getSpaceLine();
+        }
+
+
+    }
+
+
 }

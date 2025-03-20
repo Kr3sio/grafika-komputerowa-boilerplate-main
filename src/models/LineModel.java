@@ -7,11 +7,15 @@ public class LineModel {
 
     private final Integer spaceLine;
 
+    private final Integer fat;
+
     private final Color color;
 
-    public LineModel(Integer numberLine, Integer spaceLine, Color color) {
+
+    public LineModel(Integer numberLine, Integer spaceLine,Integer fat, Color color) {
         this.numberLine = numberLine;
         this.spaceLine = spaceLine;
+        this.fat = fat;
         this.color = color;
     }
 
@@ -22,6 +26,8 @@ public class LineModel {
     public Integer getSpaceLine() {
         return spaceLine;
     }
+
+    public Integer getFat(){return fat;}
 
     public Color getColor() {
         return color;
