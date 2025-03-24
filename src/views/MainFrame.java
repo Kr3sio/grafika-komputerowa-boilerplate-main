@@ -6,6 +6,7 @@ import models.CircleModel;
 import models.LineModel;
 import models.RectangleModel;
 
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
@@ -143,6 +144,8 @@ public class MainFrame extends JFrame {
         menuBar.getDrawVerticalLinesMenuItem().addActionListener(_ -> showLineVDialog());
 
         menuBar.getConvertToGreyMenuItem().addActionListener(_ -> imageController.ConvertGrey());
+
+        menuBar.getAdjustBrightnessAndContrastMenuItem().addActionListener(_ -> showAdjustDialog());
     }
 
     /**
@@ -174,6 +177,15 @@ public class MainFrame extends JFrame {
         LineModel line = dialog.getLine();
         if(line != null) {
             imageController.drawVerticalLines(line);
+        }
+    }
+
+    private void showAdjustDialog() {
+        AdjustDialog dialog = new AdjustDialog(this);
+        dialog.setVisible(true);
+        Integer[] parameter = dialog.getIntArray();
+        if(parameter != null) {
+            imageController.adjustBrightnessAndContrast(parameter);
         }
     }
 

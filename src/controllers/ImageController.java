@@ -6,6 +6,7 @@ import models.RectangleModel;
 import views.ImagePanel;
 import views.MainFrame;
 import models.LineModel;
+import views.AdjustDialog;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -214,7 +215,42 @@ public class ImageController {
         rightPanel.repaint();
     }
 
+    public void adjustBrightnessAndContrast(Integer[] parameter) {
+        if(leftPanel.getModel() == null || leftPanel.getModel().getImage() == null) {
+            JOptionPane.showMessageDialog(mainFrame, "Brak załadowanego obrazu!", "Błąd",JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        var image = leftPanel.getModel().getCopyImage();
+        Integer width = image.getWidth();
+        Integer height = image.getHeight();
 
+        BufferedImage outputImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        int brightness = parameter[0];
+        int contrast = parameter[1];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                // Pobranie koloru piksela
+                Color color = new Color(image.getRGB(x, y));
+
+                // Przetwarzanie każdej składowej (R, G, B)
+                int red = clamp((int) (contrast * color.getRed() + brightness));
+                int green = clamp((int) (contrast * color.getGreen() + brightness));
+                int blue = clamp((int) (contrast * color.getBlue() + brightness));
+
+                // Tworzenie nowego koloru
+                Color newColor = new Color(red, green, blue);
+
+                // Ustawienie piksela w nowym obrazie
+                outputImage.setRGB(x, y, newColor.getRGB());
+            }
+        }
+        rightPanel.setModel(new ImageModel(outputImage));
+        rightPanel.repaint();
+    }
+
+    private int clamp(int value) {
+        return Math.max(0, Math.min(255, value));
+    }
 
 
 }
