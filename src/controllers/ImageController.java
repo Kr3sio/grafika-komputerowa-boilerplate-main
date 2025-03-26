@@ -253,4 +253,88 @@ public class ImageController {
     }
 
 
+
+
+    public void Negation() {
+        if(leftPanel.getModel() == null || leftPanel.getModel().getImage() == null) {
+            JOptionPane.showMessageDialog(mainFrame, "Brak załadowanego obrazu!", "Błąd",JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        var image = leftPanel.getModel().getCopyImage();
+        Integer width = image.getWidth();
+        Integer height = image.getHeight();
+
+        BufferedImage outputImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                // Pobranie koloru piksela
+                Color color = new Color(image.getRGB(x, y));
+
+                // Przetwarzanie każdej składowej (R, G, B)
+                int red = clamp((int) (255- color.getRed()));
+                int green = clamp((int) (255- color.getGreen()));
+                int blue = clamp((int) (255-color.getBlue()));
+
+                // Tworzenie nowego koloru
+                Color newColor = new Color(red, green, blue);
+
+                // Ustawienie piksela w nowym obrazie
+                outputImage.setRGB(x, y, newColor.getRGB());
+            }
+        }
+        rightPanel.setModel(new ImageModel(outputImage));
+        rightPanel.repaint();
+    }
+
+    public void BrightnessRange() {
+        if(leftPanel.getModel() == null || leftPanel.getModel().getImage() == null) {
+            JOptionPane.showMessageDialog(mainFrame, "Brak załadowanego obrazu!", "Błąd",JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        var image = leftPanel.getModel().getCopyImage();
+        Integer width = image.getWidth();
+        Integer height = image.getHeight();
+
+        BufferedImage outputImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        int redMAX = 0;
+        int redMIN = 255;
+        int greenMAX = 0;
+        int greenMIN = 255;
+        int blueMAX = 0;
+        int blueMIN = 255;
+
+        for (int y = 0; y< height;y++){
+            for(int x = 0;x<width;x++){
+                Color color = new Color(image.getRGB(x,y));
+                if(color.getRed()>redMAX){redMAX = color.getRed();}
+                if(color.getRed()<redMIN) {redMIN = color.getRed();}
+                if(color.getGreen()>greenMAX){greenMAX = color.getGreen();}
+                if(color.getGreen()<greenMIN) {greenMIN = color.getGreen();}
+                if(color.getBlue()>blueMAX){blueMAX = color.getBlue();}
+                if(color.getBlue()<blueMIN) {blueMIN = color.getBlue();}
+            }
+        }
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                // Pobranie koloru piksela
+                Color color = new Color(image.getRGB(x, y));
+
+                // Przetwarzanie każdej składowej (R, G, B)
+                int red = (color.getRed()-redMIN)*255 / (redMAX-redMIN);
+                int green = (color.getGreen()-greenMIN)*255 /(greenMAX-greenMIN);
+                int blue = (color.getBlue()-blueMIN)*255 / (blueMAX-blueMIN);
+
+                // Tworzenie nowego koloru
+                Color newColor = new Color(red, green, blue);
+
+                // Ustawienie piksela w nowym obrazie
+                outputImage.setRGB(x, y, newColor.getRGB());
+            }
+        }
+        rightPanel.setModel(new ImageModel(outputImage));
+        rightPanel.repaint();
+    }
+
 }

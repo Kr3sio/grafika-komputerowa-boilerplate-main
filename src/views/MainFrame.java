@@ -146,6 +146,10 @@ public class MainFrame extends JFrame {
         menuBar.getConvertToGreyMenuItem().addActionListener(_ -> imageController.ConvertGrey());
 
         menuBar.getAdjustBrightnessAndContrastMenuItem().addActionListener(_ -> showAdjustDialog());
+
+        menuBar.getNegationMenuItem().addActionListener(_->imageController.Negation());
+
+        menuBar.getBrightnessRangeMenuItem().addActionListener(_->imageController.BrightnessRange());
     }
 
     /**

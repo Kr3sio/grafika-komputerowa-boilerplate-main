@@ -35,6 +35,10 @@ public class MenuBar extends JMenuBar {
 
     private final JMenuItem adjustBrightnessAndContrastMenuItem;
 
+    private final JMenuItem NegationMenuItem;
+
+    private final JMenuItem BrightnessRangeMenuItem;
+
     public MenuBar() {
         // Tworzenie głównych menu
         fileMenu = new JMenu("Plik");
@@ -68,6 +72,10 @@ public class MenuBar extends JMenuBar {
 
         adjustBrightnessAndContrastMenuItem = new JMenuItem("Zmień Jasność i kontrast");
 
+        NegationMenuItem = new JMenuItem("Odwrócenie kolorów");
+
+        BrightnessRangeMenuItem = new JMenuItem("Zmień zakres jasności");
+
         // Dodanie elementów do menu Plik
         fileMenu.add(openFileMenuItem);
         fileMenu.add(saveFileMenuItem);
@@ -94,6 +102,10 @@ public class MenuBar extends JMenuBar {
         editPanelMenu.add(ConvertToGreyMenuItem);
 
         editPanelMenu.add(adjustBrightnessAndContrastMenuItem);
+
+        editPanelMenu.add(NegationMenuItem);
+
+        editPanelMenu.add(BrightnessRangeMenuItem);
 
         // Dodawanie wszystkich menu do paska menu
         add(fileMenu);
@@ -141,6 +153,10 @@ public class MenuBar extends JMenuBar {
     public JMenuItem getConvertToGreyMenuItem() {return ConvertToGreyMenuItem;}
 
     public JMenuItem getAdjustBrightnessAndContrastMenuItem() {return adjustBrightnessAndContrastMenuItem;}
+
+    public JMenuItem getNegationMenuItem() {return  NegationMenuItem;}
+
+    public JMenuItem getBrightnessRangeMenuItem(){return BrightnessRangeMenuItem;}
 
     // TODO: Dodać metody getter dla nowych elementów menu.
 }
