@@ -31,7 +31,19 @@ public class MenuBar extends JMenuBar {
 
     private final JMenuItem drawVerticalLinesMenuItem;
 
+    private final JMenu ConvertToGrey;
+
     private final JMenuItem ConvertToGreyMenuItem;
+
+
+
+    private final JMenuItem ConvertToGrey3MenuItem;
+
+    private final JMenuItem ConvertToGreyRedMenuItem;
+
+    private final JMenuItem ConvertToGreyGreenMenuItem;
+
+    private final JMenuItem ConvertToGreyBlueMenuItem;
 
     private final JMenuItem adjustBrightnessAndContrastMenuItem;
 
@@ -45,6 +57,8 @@ public class MenuBar extends JMenuBar {
         leftPanelMenu = new JMenu("Lewy panel");
         rightPanelMenu = new JMenu("Prawy panel");
         editPanelMenu = new JMenu("Edycja");
+        ConvertToGrey = new JMenu("Odcienie szarości");
+
 
         // Menu plik
         openFileMenuItem = new JMenuItem("Otwórz");
@@ -68,13 +82,22 @@ public class MenuBar extends JMenuBar {
 
         drawVerticalLinesMenuItem = new JMenuItem("Narysuj linie pionowe");
 
-        ConvertToGreyMenuItem = new JMenuItem("Odcienie Szarości");
+
+        ConvertToGreyMenuItem = new JMenuItem("Średnia");
+
+
+        ConvertToGrey3MenuItem = new JMenuItem("Model YUV");
+
+        ConvertToGreyRedMenuItem = new JMenuItem("Red");
+        ConvertToGreyGreenMenuItem = new JMenuItem("Green");
+        ConvertToGreyBlueMenuItem = new JMenuItem("Blue");
 
         adjustBrightnessAndContrastMenuItem = new JMenuItem("Zmień Jasność i kontrast");
 
         NegationMenuItem = new JMenuItem("Odwrócenie kolorów");
 
         BrightnessRangeMenuItem = new JMenuItem("Zmień zakres jasności");
+
 
         // Dodanie elementów do menu Plik
         fileMenu.add(openFileMenuItem);
@@ -99,13 +122,24 @@ public class MenuBar extends JMenuBar {
 
         editPanelMenu.add(drawVerticalLinesMenuItem);
 
-        editPanelMenu.add(ConvertToGreyMenuItem);
+
 
         editPanelMenu.add(adjustBrightnessAndContrastMenuItem);
 
         editPanelMenu.add(NegationMenuItem);
 
         editPanelMenu.add(BrightnessRangeMenuItem);
+
+        editPanelMenu.add(ConvertToGrey);
+
+        ConvertToGrey.add(ConvertToGreyMenuItem);
+
+        ConvertToGrey.add(ConvertToGreyRedMenuItem);
+
+        ConvertToGrey.add(ConvertToGreyGreenMenuItem);
+        ConvertToGrey.add(ConvertToGreyBlueMenuItem);
+
+        ConvertToGrey.add(ConvertToGrey3MenuItem);
 
         // Dodawanie wszystkich menu do paska menu
         add(fileMenu);
@@ -151,6 +185,12 @@ public class MenuBar extends JMenuBar {
     public JMenuItem getDrawVerticalLinesMenuItem() {return drawVerticalLinesMenuItem;}
 
     public JMenuItem getConvertToGreyMenuItem() {return ConvertToGreyMenuItem;}
+
+    public JMenuItem getConvertToGreyRedMenuItem() {return ConvertToGreyRedMenuItem;}
+    public JMenuItem getConvertToGreyGreenMenuItem() {return ConvertToGreyGreenMenuItem;}
+    public JMenuItem getConvertToGreyBlueMenuItem() {return ConvertToGreyBlueMenuItem;}
+
+    public JMenuItem getConvertToGrey3MenuItem() {return ConvertToGrey3MenuItem;}
 
     public JMenuItem getAdjustBrightnessAndContrastMenuItem() {return adjustBrightnessAndContrastMenuItem;}
 

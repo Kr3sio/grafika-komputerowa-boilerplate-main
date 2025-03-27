@@ -8,15 +8,15 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class AdjustDialog extends JDialog {
-    private JSlider brightnessSlider;;
-    private JSlider contrastSlider;
+    private final JTextField brightnessField = new JTextField("0");
+    private final JTextField contrastField = new JTextField("1");
     private Boolean confirmed = false;
 
 
 
     public AdjustDialog(JFrame parent) {
         super(parent,"Podaj parametry",true);
-        setSize(300,300);
+        setSize(300,200);
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
 
@@ -30,30 +30,20 @@ public class AdjustDialog extends JDialog {
 
     }
     private JPanel getMainPanel(){
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel panel = new JPanel(new GridLayout(2, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
 
 
         panel.add(new JLabel("Jasność: "));
-        brightnessSlider = createSlider(-255,255,50,0);
-        panel.add(brightnessSlider);
+        panel.add(brightnessField);
         panel.add(new JLabel("Kontrast: "));
-        contrastSlider = createSlider(-100,100,20,1);
-        panel.add(contrastSlider);
+        panel.add(contrastField);
 
         return panel;
     }
 
-    private JSlider createSlider(int min, int max,int spaces, int initialValue) {
-        JSlider slider = new JSlider(JSlider.HORIZONTAL, min, max, initialValue);
-        slider.setMajorTickSpacing( spaces*2);
-        slider.setMinorTickSpacing(spaces);
-        slider.setPaintTicks(true);
-        slider.setPaintLabels(true);
-        slider.setPreferredSize(new Dimension(200, 50));
-        return slider;
-    }
+
 
     private JPanel getActionPanel() {
         JPanel buttonPanel = new JPanel();
@@ -62,9 +52,12 @@ public class AdjustDialog extends JDialog {
 
         // Obsługa przycisku OK. Sprawdzenie poprawności danych i zamknięcie okna. Jeśli dane są niepoprawne, wyświetlany jest komunikat z błędem.
         okButton.addActionListener(e -> {
+            if(validateFields()) {
                 confirmed = true;
                 dispose();
-
+            } else {
+                JOptionPane.showMessageDialog(this, "Nieprawidłowe dane!", "Błąd", JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         // Obsługa przycisku Anuluj przez zamknięcie okna dialogowego.
@@ -74,14 +67,29 @@ public class AdjustDialog extends JDialog {
         buttonPanel.add(cancelButton);
         return buttonPanel;
     }
-    public Integer[] getIntArray() {
+    public Double[] getIntArray() {
         if (confirmed) {
-            Integer[] parameter = new Integer[2];
-            parameter[0] = brightnessSlider.getValue();
-            parameter[1] = contrastSlider.getValue();
+            Double[] parameter = new Double[2];
+            parameter[0] = parseField(brightnessField);
+            parameter[1] = parseField(contrastField);
             return parameter;
         }
         return null;
+    }
+
+    private Boolean validateFields() {
+        return parseField(contrastField) != null
+                ;
+
+    }
+
+
+    private Double parseField(JTextField field) {
+        try {
+            return Double.parseDouble(field.getText());
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
 

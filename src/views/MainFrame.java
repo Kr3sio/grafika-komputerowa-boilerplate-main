@@ -145,6 +145,14 @@ public class MainFrame extends JFrame {
 
         menuBar.getConvertToGreyMenuItem().addActionListener(_ -> imageController.ConvertGrey());
 
+        menuBar.getConvertToGreyRedMenuItem().addActionListener(_->imageController.ConvertGreyRed());
+
+        menuBar.getConvertToGreyGreenMenuItem().addActionListener(_->imageController.ConvertGreyGreen());
+
+        menuBar.getConvertToGreyBlueMenuItem().addActionListener(_->imageController.ConvertGreyBlue());
+
+        menuBar.getConvertToGrey3MenuItem().addActionListener(_->imageController.ConvertGrey3());
+
         menuBar.getAdjustBrightnessAndContrastMenuItem().addActionListener(_ -> showAdjustDialog());
 
         menuBar.getNegationMenuItem().addActionListener(_->imageController.Negation());
@@ -187,7 +195,7 @@ public class MainFrame extends JFrame {
     private void showAdjustDialog() {
         AdjustDialog dialog = new AdjustDialog(this);
         dialog.setVisible(true);
-        Integer[] parameter = dialog.getIntArray();
+        Double[] parameter = dialog.getIntArray();
         if(parameter != null) {
             imageController.adjustBrightnessAndContrast(parameter);
         }

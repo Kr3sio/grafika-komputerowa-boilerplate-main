@@ -185,9 +185,9 @@ public class ImageController {
 
     }
 
-    public void ConvertGrey(){
-        if(leftPanel.getModel() == null || leftPanel.getModel().getImage() == null) {
-            JOptionPane.showMessageDialog(mainFrame, "Brak załadowanego obrazu!", "Błąd",JOptionPane.ERROR_MESSAGE);
+    public void ConvertGrey() {
+        if (leftPanel.getModel() == null || leftPanel.getModel().getImage() == null) {
+            JOptionPane.showMessageDialog(mainFrame, "Brak załadowanego obrazu!", "Błąd", JOptionPane.ERROR_MESSAGE);
             return;
         }
         var image = leftPanel.getModel().getCopyImage();
@@ -203,19 +203,123 @@ public class ImageController {
                 int green = color.getGreen();
                 int blue = color.getBlue();
 
-                int grayValue = (int) (0.3 * red + 0.59 * green + 0.11 * blue);
+                int grayValue = (int) ((red + green + blue)/3);
                 Color grayColor = new Color(grayValue, grayValue, grayValue);
 
                 grayscaleimage.setRGB(x, y, grayColor.getRGB());
             }
 
+
         }
+        rightPanel.setModel(new ImageModel(grayscaleimage));
+        rightPanel.repaint();
+    }
+        public void ConvertGreyRed() {
+            if (leftPanel.getModel() == null || leftPanel.getModel().getImage() == null) {
+                JOptionPane.showMessageDialog(mainFrame, "Brak załadowanego obrazu!", "Błąd", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            var image = leftPanel.getModel().getCopyImage();
+            Integer width = image.getWidth();
+            Integer height = image.getHeight();
+            var grayscaleimage = leftPanel.getModel().getCopyImage();
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    Color color = new Color(image.getRGB(x, y));
+
+                    int red = color.getRed();
+                    int green = color.getRed();
+                    int blue =  color.getRed();
+
+                    // Tworzenie nowego koloru
+                    Color newColor = new Color(red, green, blue);
+
+                    // Ustawienie piksela w nowym obrazie
+                    grayscaleimage.setRGB(x, y, newColor.getRGB());
+                }
+            }
+            rightPanel.setModel(new ImageModel(grayscaleimage));
+            rightPanel.repaint();
+        }
+    public void ConvertGreyGreen() {
+        if (leftPanel.getModel() == null || leftPanel.getModel().getImage() == null) {
+            JOptionPane.showMessageDialog(mainFrame, "Brak załadowanego obrazu!", "Błąd", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        var image = leftPanel.getModel().getCopyImage();
+        Integer width = image.getWidth();
+        Integer height = image.getHeight();
+        var grayscaleimage = leftPanel.getModel().getCopyImage();
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                Color color = new Color(image.getRGB(x, y));
+
+                int red = color.getGreen();
+                int green = color.getGreen();
+                int blue =  color.getGreen();
+
+                // Tworzenie nowego koloru
+                Color newColor = new Color(red, green, blue);
+
+                // Ustawienie piksela w nowym obrazie
+                grayscaleimage.setRGB(x, y, newColor.getRGB());
+            }
+        }
+        rightPanel.setModel(new ImageModel(grayscaleimage));
+        rightPanel.repaint();
+    }
+    public void ConvertGreyBlue() {
+        if (leftPanel.getModel() == null || leftPanel.getModel().getImage() == null) {
+            JOptionPane.showMessageDialog(mainFrame, "Brak załadowanego obrazu!", "Błąd", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        var image = leftPanel.getModel().getCopyImage();
+        Integer width = image.getWidth();
+        Integer height = image.getHeight();
+        var grayscaleimage = leftPanel.getModel().getCopyImage();
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                Color color = new Color(image.getRGB(x, y));
+
+                int red = color.getBlue();
+                int green = color.getBlue();
+                int blue =  color.getBlue();
+
+                // Tworzenie nowego koloru
+                Color newColor = new Color(red, green, blue);
+
+                // Ustawienie piksela w nowym obrazie
+                grayscaleimage.setRGB(x, y, newColor.getRGB());
+            }
+        }
+        rightPanel.setModel(new ImageModel(grayscaleimage));
+        rightPanel.repaint();
+    }
+            public void ConvertGrey3(){
+                if(leftPanel.getModel() == null || leftPanel.getModel().getImage() == null) {
+                    JOptionPane.showMessageDialog(mainFrame, "Brak załadowanego obrazu!", "Błąd",JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                var image = leftPanel.getModel().getCopyImage();
+                Integer width = image.getWidth();
+                Integer height = image.getHeight();
+                var grayscaleimage = leftPanel.getModel().getCopyImage();
+
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        Color color = new Color(image.getRGB(x, y));
+                        int grayValue = (int) (0.299 * color.getRed() + 0.587 * color.getGreen() + 0.114 * color.getBlue());
+                        Color grayColor = new Color(grayValue, grayValue, grayValue);
+                        grayscaleimage.setRGB(x, y, grayColor.getRGB());
+                    }
+                }
+
 
         rightPanel.setModel(new ImageModel(grayscaleimage));
         rightPanel.repaint();
     }
 
-    public void adjustBrightnessAndContrast(Integer[] parameter) {
+    public void adjustBrightnessAndContrast(Double[] parameter) {
         if(leftPanel.getModel() == null || leftPanel.getModel().getImage() == null) {
             JOptionPane.showMessageDialog(mainFrame, "Brak załadowanego obrazu!", "Błąd",JOptionPane.ERROR_MESSAGE);
             return;
@@ -225,8 +329,8 @@ public class ImageController {
         Integer height = image.getHeight();
 
         BufferedImage outputImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        int brightness = parameter[0];
-        int contrast = parameter[1];
+        double brightness = parameter[0];
+        double contrast = parameter[1];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 // Pobranie koloru piksela
