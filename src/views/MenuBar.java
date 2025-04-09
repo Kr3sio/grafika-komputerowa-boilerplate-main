@@ -13,6 +13,8 @@ public class MenuBar extends JMenuBar {
     private final JMenu rightPanelMenu;
     private final JMenu editPanelMenu;
 
+    private final JMenu filtrPanelMenu;
+
     private final JMenuItem openFileMenuItem;
     private final JMenuItem saveFileMenuItem;
     private final JMenuItem exitMenuItem;
@@ -51,12 +53,17 @@ public class MenuBar extends JMenuBar {
 
     private final JMenuItem BrightnessRangeMenuItem;
 
+    private final JMenuItem applyConvolutionMenuItem;
+
+
+
     public MenuBar() {
         // Tworzenie głównych menu
         fileMenu = new JMenu("Plik");
         leftPanelMenu = new JMenu("Lewy panel");
         rightPanelMenu = new JMenu("Prawy panel");
         editPanelMenu = new JMenu("Edycja");
+        filtrPanelMenu = new JMenu("Filtry");
         ConvertToGrey = new JMenu("Odcienie szarości");
 
 
@@ -98,6 +105,8 @@ public class MenuBar extends JMenuBar {
 
         BrightnessRangeMenuItem = new JMenuItem("Zmień zakres jasności");
 
+        //Menu filtry
+        applyConvolutionMenuItem = new JMenuItem("splot");
 
         // Dodanie elementów do menu Plik
         fileMenu.add(openFileMenuItem);
@@ -141,11 +150,18 @@ public class MenuBar extends JMenuBar {
 
         ConvertToGrey.add(ConvertToGrey3MenuItem);
 
+        filtrPanelMenu.add(applyConvolutionMenuItem);
+
+        // Dodawanie elementów do menu filtrów
+
+
+
         // Dodawanie wszystkich menu do paska menu
         add(fileMenu);
         add(leftPanelMenu);
         add(rightPanelMenu);
         add(editPanelMenu);
+        add(filtrPanelMenu);
     }
 
     public JMenuItem getOpenFileMenuItem() {
@@ -197,6 +213,10 @@ public class MenuBar extends JMenuBar {
     public JMenuItem getNegationMenuItem() {return  NegationMenuItem;}
 
     public JMenuItem getBrightnessRangeMenuItem(){return BrightnessRangeMenuItem;}
+
+    public JMenuItem getApplyConvolutionMenuItem() {return applyConvolutionMenuItem;}
+
+
 
     // TODO: Dodać metody getter dla nowych elementów menu.
 }

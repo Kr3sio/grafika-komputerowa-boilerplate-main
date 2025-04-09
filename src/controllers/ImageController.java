@@ -6,7 +6,7 @@ import models.RectangleModel;
 import views.ImagePanel;
 import views.MainFrame;
 import models.LineModel;
-import views.AdjustDialog;
+
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -438,6 +438,59 @@ public class ImageController {
             }
         }
         rightPanel.setModel(new ImageModel(outputImage));
+        rightPanel.repaint();
+    }
+
+    public void applyConvolution(float[][] mask, float normalization) {
+        if(leftPanel.getModel() == null || leftPanel.getModel().getImage() == null) {
+            JOptionPane.showMessageDialog(mainFrame, "Brak załadowanego obrazu!", "Błąd",JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        var image = leftPanel.getModel().getCopyImage();
+        Integer width = image.getWidth();
+        Integer height = image.getHeight();
+        BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+        for (int y = 1; y < height - 1; y++) {
+            for (int x = 1; x < width - 1; x++) {
+                int rSum = 0, gSum = 0, bSum = 0;
+
+                // Splot
+                for (int j = -1; j <= 1; j++) {
+                    for (int i = -1; i <= 1; i++) {
+                        int rgb = image.getRGB(x + i, y + j);
+                        int r = (rgb >> 16) & 0xFF;
+                        int g = (rgb >> 8) & 0xFF;
+                        int b = rgb & 0xFF;
+
+                        rSum += r * mask[j + 1][i + 1];
+                        gSum += g * mask[j + 1][i + 1];
+                        bSum += b * mask[j + 1][i + 1];
+                    }
+                }
+
+                // Ograniczenie wartości do zakresu 0-255
+                rSum = Math.min(Math.max(rSum, 0), 255);
+                gSum = Math.min(Math.max(gSum, 0), 255);
+                bSum = Math.min(Math.max(bSum, 0), 255);
+
+                // Ustawienie nowej wartości piksela
+                int newRGB = (rSum << 16) | (gSum << 8) | bSum;
+                result.setRGB(x, y, newRGB);
+            }
+        }
+
+        // Kopiowanie brzegów bez zmian
+        for (int x = 0; x < width; x++) {
+            result.setRGB(x, 0, image.getRGB(x, 0));
+            result.setRGB(x, height - 1, image.getRGB(x, height - 1));
+        }
+        for (int y = 0; y < height; y++) {
+            result.setRGB(0, y, image.getRGB(0, y));
+            result.setRGB(width - 1, y, image.getRGB(width - 1, y));
+        }
+
+        rightPanel.setModel(new ImageModel(result));
         rightPanel.repaint();
     }
 

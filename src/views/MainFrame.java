@@ -158,6 +158,8 @@ public class MainFrame extends JFrame {
         menuBar.getNegationMenuItem().addActionListener(_->imageController.Negation());
 
         menuBar.getBrightnessRangeMenuItem().addActionListener(_->imageController.BrightnessRange());
+
+        menuBar.getApplyConvolutionMenuItem().addActionListener(_->applyConvolutionSelectMask());
     }
 
     /**
@@ -201,6 +203,15 @@ public class MainFrame extends JFrame {
         }
     }
 
+    private void applyConvolutionSelectMask(){
+        MaskSelectDialog dialog = new MaskSelectDialog(this);
+        dialog.setVisible(true);
+        float[][] mask = dialog.getSelectedMask();
+        float norm = dialog.getNormalization();
+        if(mask != null) {
+            imageController.applyConvolution(mask, norm);
+        }
+    }
 
     /**
      * Metoda otwiera okno dialogowe umożliwiające użytkownikowi wprowadzenie parametrów koła, który zostanie narysowane na wczytanym obrazie.
