@@ -6,81 +6,52 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MaskSelectDialog extends JDialog {
-    private JComboBox<String> maskComboBox;
     private boolean confirmed = false;
-    private final Map<String, float[][]> maskiMap = new HashMap<>();
-    private final Map<String, Float> normalizacjeMap = new HashMap<>();
+    private final JTextField lg = new JTextField("-1");
+    private final JTextField sg = new JTextField("-1");
+    private final JTextField pg = new JTextField("-1");
+    private final JTextField ls = new JTextField("-1");
+    private final JTextField ss = new JTextField("8");
+    private final JTextField ps = new JTextField("-1");
+    private final JTextField ld = new JTextField("-1");
+    private final JTextField sd = new JTextField("-1");
+    private final JTextField pd = new JTextField("-1");
+
 
     public MaskSelectDialog(JFrame parent) {
-        super(parent, "Wybierz maskę", true);
+        super(parent, "Wprowadź maskę", true);
         setSize(300, 200);
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
 
-        initializeMasks();
 
-        JPanel panel = new JPanel(new BorderLayout(10, 10));
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        panel.add(new JLabel("Wybierz filtr:"), BorderLayout.NORTH);
 
-        maskComboBox = new JComboBox<>(maskiMap.keySet().toArray(new String[0]));
-        panel.add(maskComboBox, BorderLayout.CENTER);
+        JPanel panel = getMainPanel();
+
         add(panel, BorderLayout.CENTER);
 
         add(getActionPanel(), BorderLayout.SOUTH);
     }
+    private JPanel getMainPanel(){
 
-    private void initializeMasks() {
-        // Dodaj maski i ich normalizację
-        maskiMap.put("Sobel-X", new float[][] {
-                {-1, 0, 1},
-                {-2, 0, 2},
-                {-1, 0, 1}
-        });
-        normalizacjeMap.put("Sobel-X", 1f);
+        JPanel panel = new JPanel(new GridLayout(4,3,5,5));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        maskiMap.put("Sobel-Y", new float[][] {
-                {-1, -2, -1},
-                { 0,  0,  0},
-                { 1,  2,  1}
-        });
-        normalizacjeMap.put("Sobel-Y", 1f);
 
-        maskiMap.put("Prewitt-X", new float[][] {
-                {-1, 0, 1},
-                {-1, 0, 1},
-                {-1, 0, 1}
-        });
-        normalizacjeMap.put("Prewitt-X", 1f);
 
-        maskiMap.put("Prewitt-Y", new float[][] {
-                {-1, -1, -1},
-                { 0,  0,  0},
-                { 1,  1,  1}
-        });
-        normalizacjeMap.put("Prewitt-Y", 1f);
+        panel.add(lg);
+        panel.add(sg);
+        panel.add(pg);
+        panel.add(ls);
+        panel.add(ss);
+        panel.add(ps);
+        panel.add(ld);
+        panel.add(sd);
+        panel.add(pd);
 
-        maskiMap.put("Edge-East", new float[][] {
-                {-1, -1, 1},
-                {-1,  1, 1},
-                {-1, -1, 1}
-        });
-        normalizacjeMap.put("Edge-East", 1f);
-
-        maskiMap.put("Edge-SouthEast", new float[][] {
-                {-1, 1, 1},
-                {-1, 1, 1},
-                {-1, -1, 1}
-        });
-        normalizacjeMap.put("Edge-SouthEast", 1f);
-
-        maskiMap.put("Edge-SouthWest", new float[][] {
-                { 1,  1, -1},
-                { 1,  1, -1},
-                { 1, -1, -1}
-        });
-        normalizacjeMap.put("Edge-SouthWest", 1f);
+        return panel;
     }
+
 
     private JPanel getActionPanel() {
         JPanel panel = new JPanel();
@@ -103,13 +74,32 @@ public class MaskSelectDialog extends JDialog {
         return confirmed;
     }
 
-    public float[][] getSelectedMask() {
-        String selected = (String) maskComboBox.getSelectedItem();
-        return maskiMap.get(selected);
+    public int[][] getSelectedMask() {
+        int[][] mask = new int[][]{
+                {parseField(lg),parseField(sg),parseField(pg)},
+                {parseField(ls),parseField(ss),parseField(ps)},
+                {parseField(ld),parseField(sd),parseField(pd)}
+        };
+        return mask;
     }
 
-    public float getNormalization() {
-        String selected = (String) maskComboBox.getSelectedItem();
-        return normalizacjeMap.getOrDefault(selected, 1f);
+    public int getNormalization(){
+        int normalizawtion = 0;
+        int[][] mask = getSelectedMask();
+        for(int i = 0;i>3;i++){
+            for(int j = 0;j>3;i++){
+                normalizawtion+=mask[i][j];
+            }
+        }
+        return normalizawtion;
     }
+
+    private Integer parseField(JTextField field) {
+        try {
+            return Integer.parseInt(field.getText());
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
 }

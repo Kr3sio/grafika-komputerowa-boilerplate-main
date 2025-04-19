@@ -160,6 +160,16 @@ public class MainFrame extends JFrame {
         menuBar.getBrightnessRangeMenuItem().addActionListener(_->imageController.BrightnessRange());
 
         menuBar.getApplyConvolutionMenuItem().addActionListener(_->applyConvolutionSelectMask());
+
+        menuBar.getMedianaMenuItem().addActionListener(_->imageController.mediana());
+
+        menuBar.getMinimalMenuItem().addActionListener(_->imageController.minimalny());
+
+        menuBar.getMaksimumMenuItem().addActionListener(_->imageController.maksymalny());
+
+        menuBar.getGradnientPMenuItem().addActionListener(_->imageController.gradientProsty());
+
+        menuBar.getGradientRobertsaMenuItem().addActionListener(_->imageController.gradientRobertsa());
     }
 
     /**
@@ -206,12 +216,14 @@ public class MainFrame extends JFrame {
     private void applyConvolutionSelectMask(){
         MaskSelectDialog dialog = new MaskSelectDialog(this);
         dialog.setVisible(true);
-        float[][] mask = dialog.getSelectedMask();
-        float norm = dialog.getNormalization();
+        int[][] mask = dialog.getSelectedMask();
+        int norm = dialog.getNormalization();
         if(mask != null) {
             imageController.applyConvolution(mask, norm);
         }
     }
+
+
 
     /**
      * Metoda otwiera okno dialogowe umożliwiające użytkownikowi wprowadzenie parametrów koła, który zostanie narysowane na wczytanym obrazie.

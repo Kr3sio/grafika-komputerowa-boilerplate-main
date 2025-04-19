@@ -55,6 +55,16 @@ public class MenuBar extends JMenuBar {
 
     private final JMenuItem applyConvolutionMenuItem;
 
+    private final JMenuItem medianaMenuItem;
+
+    private final JMenuItem minimalMenuItem;
+
+    private final JMenuItem maksimumMenuItem;
+
+    private final JMenuItem gradnientPMenuItem;
+
+    private final JMenuItem gradientRobertsaMenuItem;
+
 
 
     public MenuBar() {
@@ -108,6 +118,16 @@ public class MenuBar extends JMenuBar {
         //Menu filtry
         applyConvolutionMenuItem = new JMenuItem("splot");
 
+        medianaMenuItem = new JMenuItem("Medianowy");
+
+        minimalMenuItem = new JMenuItem("Minimalny");
+
+        maksimumMenuItem = new JMenuItem("Maksymalny");
+
+        gradnientPMenuItem = new JMenuItem("Gradient prosty");
+
+        gradientRobertsaMenuItem = new JMenuItem("Gradient Roberts'a");
+
         // Dodanie elementów do menu Plik
         fileMenu.add(openFileMenuItem);
         fileMenu.add(saveFileMenuItem);
@@ -150,10 +170,19 @@ public class MenuBar extends JMenuBar {
 
         ConvertToGrey.add(ConvertToGrey3MenuItem);
 
-        filtrPanelMenu.add(applyConvolutionMenuItem);
+
 
         // Dodawanie elementów do menu filtrów
+        filtrPanelMenu.add(applyConvolutionMenuItem);
 
+        filtrPanelMenu.add(medianaMenuItem);
+
+        filtrPanelMenu.add(minimalMenuItem);
+        filtrPanelMenu.add(maksimumMenuItem);
+
+        filtrPanelMenu.add(gradnientPMenuItem);
+
+        filtrPanelMenu.add(gradientRobertsaMenuItem);
 
 
         // Dodawanie wszystkich menu do paska menu
@@ -215,6 +244,16 @@ public class MenuBar extends JMenuBar {
     public JMenuItem getBrightnessRangeMenuItem(){return BrightnessRangeMenuItem;}
 
     public JMenuItem getApplyConvolutionMenuItem() {return applyConvolutionMenuItem;}
+
+    public JMenuItem getMedianaMenuItem(){return  medianaMenuItem;}
+
+    public JMenuItem getMinimalMenuItem(){return minimalMenuItem;}
+
+    public JMenuItem getMaksimumMenuItem(){return maksimumMenuItem;}
+
+    public JMenuItem getGradnientPMenuItem(){return gradnientPMenuItem;}
+
+    public JMenuItem getGradientRobertsaMenuItem(){return gradientRobertsaMenuItem;}
 
 
 
