@@ -115,8 +115,8 @@ public class MaskSelectDialog extends JDialog {
     public int getNormalization(){
         int normalizawtion = 0;
         int[][] mask = getSelectedMask();
-        for(int i = 0;i>3;i++){
-            for(int j = 0;j>3;i++){
+        for(int i = 0;i<3;i++){
+            for(int j = 0;j<3;j++){
                 normalizawtion+=mask[i][j];
             }
         }
