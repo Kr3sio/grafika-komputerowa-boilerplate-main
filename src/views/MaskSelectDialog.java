@@ -20,7 +20,7 @@ public class MaskSelectDialog extends JDialog {
 
     public MaskSelectDialog(JFrame parent) {
         super(parent, "Wprowadź maskę", true);
-        setSize(300, 200);
+        setSize(350, 250);
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
 
@@ -29,6 +29,8 @@ public class MaskSelectDialog extends JDialog {
         JPanel panel = getMainPanel();
 
         add(panel, BorderLayout.CENTER);
+
+        add(getGlobalSetPanel(),BorderLayout.NORTH);
 
         add(getActionPanel(), BorderLayout.SOUTH);
     }
@@ -48,6 +50,33 @@ public class MaskSelectDialog extends JDialog {
         panel.add(ld);
         panel.add(sd);
         panel.add(pd);
+
+        return panel;
+    }
+
+    private JPanel getGlobalSetPanel(){
+        JPanel panel = new JPanel(new FlowLayout());
+        JLabel label = new JLabel("Ustaw wartość we wszystkich polach");
+        JTextField valueField = new JTextField(5);
+        JButton applyButton = new JButton("Zastosuj");
+
+        applyButton.addActionListener(e -> {
+            String value = valueField.getText();
+
+            lg.setText(value);
+            sg.setText(value);
+            pg.setText(value);
+            ls.setText(value);
+            ss.setText(value);
+            ps.setText(value);
+            ld.setText(value);
+            sd.setText(value);
+            pd.setText(value);
+        });
+
+        panel.add(label);
+        panel.add(valueField);
+        panel.add(applyButton);
 
         return panel;
     }
@@ -90,6 +119,9 @@ public class MaskSelectDialog extends JDialog {
             for(int j = 0;j>3;i++){
                 normalizawtion+=mask[i][j];
             }
+        }
+        if(normalizawtion==0){
+            normalizawtion=1;
         }
         return normalizawtion;
     }

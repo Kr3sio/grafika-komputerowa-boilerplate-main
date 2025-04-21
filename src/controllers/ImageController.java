@@ -464,9 +464,9 @@ public class ImageController {
                         int g = (rgb >> 8) & 0xFF;
                         int b = rgb & 0xFF;
 
-                        rSum += r * mask[j + 1][i + 1];
-                        gSum += g * mask[j + 1][i + 1];
-                        bSum += b * mask[j + 1][i + 1];
+                        rSum += (r * mask[j + 1][i + 1])/normalization;
+                        gSum += (g * mask[j + 1][i + 1])/normalization;
+                        bSum += (b * mask[j + 1][i + 1])/normalization;
                     }
                 }
 
