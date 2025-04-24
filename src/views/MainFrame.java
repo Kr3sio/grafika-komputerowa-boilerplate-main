@@ -161,6 +161,8 @@ public class MainFrame extends JFrame {
 
         menuBar.getApplyConvolutionMenuItem().addActionListener(_->applyConvolutionSelectMask());
 
+        menuBar.getApplyConvolutionYUVMenuItem().addActionListener(_->applyConvolutionSelectMaskYUV());
+
         menuBar.getMedianaMenuItem().addActionListener(_->imageController.mediana());
 
         menuBar.getMinimalMenuItem().addActionListener(_->imageController.minimalny());
@@ -170,6 +172,14 @@ public class MainFrame extends JFrame {
         menuBar.getGradnientPMenuItem().addActionListener(_->imageController.gradientProsty());
 
         menuBar.getGradientRobertsaMenuItem().addActionListener(_->imageController.gradientRobertsa());
+
+        menuBar.getGradientProgMenuItem().addActionListener(_->showgradientProg());
+
+        menuBar.getGradientTlobialeMenuItem().addActionListener(_->imageController.gradientTlobiale());
+
+        menuBar.getGradientCzarnelinieMenuItem().addActionListener(_->imageController.gradientCzarnelinie());
+
+        menuBar.getGradientObaMenuItem().addActionListener(_->imageController.gradientOba());
     }
 
     /**
@@ -220,6 +230,24 @@ public class MainFrame extends JFrame {
         int norm = dialog.getNormalization();
         if(mask != null) {
             imageController.applyConvolution(mask, norm);
+        }
+    }
+    private void applyConvolutionSelectMaskYUV(){
+        MaskSelectDialog dialog = new MaskSelectDialog(this);
+        dialog.setVisible(true);
+        int[][] mask = dialog.getSelectedMask();
+        int norm = dialog.getNormalization();
+        if(mask != null) {
+            imageController.applyConvolutionYUV(mask, norm);
+        }
+    }
+
+    private void showgradientProg(){
+        ProgDialog dialog = new ProgDialog(this);
+        dialog.setVisible(true);
+        int prog = dialog.getProg();
+        if(prog >= 0 && prog <=255){
+            imageController.gradientProg(prog);
         }
     }
 

@@ -55,6 +55,8 @@ public class MenuBar extends JMenuBar {
 
     private final JMenuItem applyConvolutionMenuItem;
 
+    private final JMenuItem applyConvolutionYUVMenuItem;
+
     private final JMenuItem medianaMenuItem;
 
     private final JMenuItem minimalMenuItem;
@@ -64,6 +66,16 @@ public class MenuBar extends JMenuBar {
     private final JMenuItem gradnientPMenuItem;
 
     private final JMenuItem gradientRobertsaMenuItem;
+
+    private final JMenuItem gradientProgMenuItem;
+
+    private final JMenuItem gradientTlobialeMenuItem;
+
+    private final JMenuItem gradientCzarnelinieMenuItem;
+
+    private final JMenuItem gradientObaMenuItem;
+
+
 
 
 
@@ -116,7 +128,9 @@ public class MenuBar extends JMenuBar {
         BrightnessRangeMenuItem = new JMenuItem("Zmień zakres jasności");
 
         //Menu filtry
-        applyConvolutionMenuItem = new JMenuItem("splot");
+        applyConvolutionMenuItem = new JMenuItem("splot RGB");
+
+        applyConvolutionYUVMenuItem = new JMenuItem("splot YUV");
 
         medianaMenuItem = new JMenuItem("Medianowy");
 
@@ -127,6 +141,14 @@ public class MenuBar extends JMenuBar {
         gradnientPMenuItem = new JMenuItem("Gradient prosty");
 
         gradientRobertsaMenuItem = new JMenuItem("Gradient Roberts'a");
+
+        gradientProgMenuItem = new JMenuItem("Gradient z progowaniem");
+
+        gradientTlobialeMenuItem = new JMenuItem("Białe tło");
+
+        gradientCzarnelinieMenuItem = new JMenuItem("Czarne krawędzie");
+
+        gradientObaMenuItem = new JMenuItem("Białe tło i czarne krawędzie");
 
         // Dodanie elementów do menu Plik
         fileMenu.add(openFileMenuItem);
@@ -175,6 +197,8 @@ public class MenuBar extends JMenuBar {
         // Dodawanie elementów do menu filtrów
         filtrPanelMenu.add(applyConvolutionMenuItem);
 
+        filtrPanelMenu.add(applyConvolutionYUVMenuItem);
+
         filtrPanelMenu.add(medianaMenuItem);
 
         filtrPanelMenu.add(minimalMenuItem);
@@ -183,6 +207,14 @@ public class MenuBar extends JMenuBar {
         filtrPanelMenu.add(gradnientPMenuItem);
 
         filtrPanelMenu.add(gradientRobertsaMenuItem);
+
+        filtrPanelMenu.add(gradientProgMenuItem);
+
+        filtrPanelMenu.add(gradientTlobialeMenuItem);
+
+        filtrPanelMenu.add(gradientCzarnelinieMenuItem);
+
+        filtrPanelMenu.add(gradientObaMenuItem);
 
 
         // Dodawanie wszystkich menu do paska menu
@@ -245,6 +277,8 @@ public class MenuBar extends JMenuBar {
 
     public JMenuItem getApplyConvolutionMenuItem() {return applyConvolutionMenuItem;}
 
+    public JMenuItem getApplyConvolutionYUVMenuItem(){return applyConvolutionYUVMenuItem;}
+
     public JMenuItem getMedianaMenuItem(){return  medianaMenuItem;}
 
     public JMenuItem getMinimalMenuItem(){return minimalMenuItem;}
@@ -254,6 +288,14 @@ public class MenuBar extends JMenuBar {
     public JMenuItem getGradnientPMenuItem(){return gradnientPMenuItem;}
 
     public JMenuItem getGradientRobertsaMenuItem(){return gradientRobertsaMenuItem;}
+
+    public JMenuItem getGradientProgMenuItem(){return gradientProgMenuItem;}
+
+    public JMenuItem getGradientTlobialeMenuItem(){return gradientTlobialeMenuItem;}
+
+    public JMenuItem getGradientCzarnelinieMenuItem(){return gradientCzarnelinieMenuItem;}
+
+    public JMenuItem getGradientObaMenuItem(){return gradientObaMenuItem;}
 
 
 

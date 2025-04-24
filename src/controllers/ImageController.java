@@ -459,10 +459,10 @@ public class ImageController {
                 // Splot
                 for (int j = -1; j <= 1; j++) {
                     for (int i = -1; i <= 1; i++) {
-                        int rgb = image.getRGB(x + i, y + j);
-                        int r = (rgb >> 16) & 0xFF;
-                        int g = (rgb >> 8) & 0xFF;
-                        int b = rgb & 0xFF;
+                        Color color = new Color(image.getRGB(x + i, y + j));
+                        int r = color.getRed();
+                        int g = color.getGreen();
+                        int b = color.getBlue();
 
                         rSum += (r * mask[j + 1][i + 1])/normalization;
                         gSum += (g * mask[j + 1][i + 1])/normalization;
@@ -476,8 +476,8 @@ public class ImageController {
                 bSum = Math.min(Math.max(bSum, 0), 255);
 
                 // Ustawienie nowej wartości piksela
-                int newRGB = (rSum << 16) | (gSum << 8) | bSum;
-                result.setRGB(x, y, newRGB);
+                Color newRGB = new Color(rSum,gSum,bSum);
+                result.setRGB(x, y, newRGB.getRGB());
             }
         }
 
@@ -494,6 +494,78 @@ public class ImageController {
         rightPanel.setModel(new ImageModel(result));
         rightPanel.repaint();
     }
+
+    public void applyConvolutionYUV(int[][] mask, int normalization) {
+        if (leftPanel.getModel() == null || leftPanel.getModel().getImage() == null) {
+            JOptionPane.showMessageDialog(mainFrame, "Brak załadowanego obrazu!", "Błąd", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        var image = leftPanel.getModel().getCopyImage();
+        int width = image.getWidth();
+        int height = image.getHeight();
+        BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+        for (int y = 1; y < height - 1; y++) {
+            for (int x = 1; x < width - 1; x++) {
+                double ySum = 0;
+                double u = 0, v = 0;
+
+
+                {
+                    Color centerColor = new Color(image.getRGB(x, y));
+                    int r = centerColor.getRed();
+                    int g = centerColor.getGreen();
+                    int b = centerColor.getBlue();
+                    u = -0.14713 * r - 0.28886 * g + 0.436 * b;
+                    v = 0.615 * r - 0.51499 * g - 0.10001 * b;
+                }
+
+                // Splot dla kanału Y
+                for (int j = -1; j <= 1; j++) {
+                    for (int i = -1; i <= 1; i++) {
+                        Color color = new Color(image.getRGB(x + i, y + j));
+                        int r = color.getRed();
+                        int g = color.getGreen();
+                        int b = color.getBlue();
+
+                        double yComponent = 0.299 * r + 0.587 * g + 0.114 * b;
+                        ySum += yComponent * mask[j + 1][i + 1] / (double) normalization;
+                    }
+                }
+
+                // Ogranicz zakres Y
+                ySum = Math.min(Math.max(ySum, 0), 255);
+
+                // Konwersja z YUV do RGB
+                int rOut = (int) (ySum + 1.13983 * v);
+                int gOut = (int) (ySum - 0.39465 * u - 0.58060 * v);
+                int bOut = (int) (ySum + 2.03211 * u);
+
+                // Ograniczenie RGB do zakresu 0-255
+                rOut = Math.min(Math.max(rOut, 0), 255);
+                gOut = Math.min(Math.max(gOut, 0), 255);
+                bOut = Math.min(Math.max(bOut, 0), 255);
+
+                Color newColor = new Color(rOut, gOut, bOut);
+                result.setRGB(x, y, newColor.getRGB());
+            }
+        }
+
+        // Kopiowanie brzegów bez zmian
+        for (int x = 0; x < width; x++) {
+            result.setRGB(x, 0, image.getRGB(x, 0));
+            result.setRGB(x, height - 1, image.getRGB(x, height - 1));
+        }
+        for (int y = 0; y < height; y++) {
+            result.setRGB(0, y, image.getRGB(0, y));
+            result.setRGB(width - 1, y, image.getRGB(width - 1, y));
+        }
+
+        rightPanel.setModel(new ImageModel(result));
+        rightPanel.repaint();
+    }
+
 
 
     public void mediana() {
@@ -758,6 +830,250 @@ public class ImageController {
         rightPanel.repaint();
     }
 
+    public void gradientProg(int prog) {
+        if (leftPanel.getModel() == null || leftPanel.getModel().getImage() == null) {
+            JOptionPane.showMessageDialog(mainFrame, "Brak załadowanego obrazu!", "Błąd", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        BufferedImage image = leftPanel.getModel().getCopyImage();
+        int width = image.getWidth();
+        int height = image.getHeight();
+        BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+        int[][] gx = {
+                {-1, 0, 1},
+                {-1, 0, 1},
+                {-1, 0, 1}
+        };
+
+        int[][] gy = {
+                {1, 1, 1},
+                {0, 0, 0},
+                {-1, -1, -1}
+        };
+
+        for (int y = 1; y < height - 1; y++) {
+            for (int x = 1; x < width - 1; x++) {
+                int sumRx = 0, sumGx = 0, sumBx = 0;
+                int sumRy = 0, sumGy = 0, sumBy = 0;
+
+                for (int i = -1; i <= 1; i++) {
+                    for (int j = -1; j <= 1; j++) {
+                        Color c = new Color(image.getRGB(x + j, y + i));
+
+                        sumRx += c.getRed()   * gx[i + 1][j + 1];
+                        sumGx += c.getGreen() * gx[i + 1][j + 1];
+                        sumBx += c.getBlue()  * gx[i + 1][j + 1];
+
+                        sumRy += c.getRed()   * gy[i + 1][j + 1];
+                        sumGy += c.getGreen() * gy[i + 1][j + 1];
+                        sumBy += c.getBlue()  * gy[i + 1][j + 1];
+                    }
+                }
+
+                int r = Math.min(255, Math.abs(sumRx) + Math.abs(sumRy));
+                int g = Math.min(255, Math.abs(sumGx) + Math.abs(sumGy));
+                int b = Math.min(255, Math.abs(sumBx) + Math.abs(sumBy));
+
+                Color newColor = new Color(image.getRGB(x,y));
+                int brightness = (r+b+g)/3;
+                if(brightness>prog){
+                    result.setRGB(x, y, newColor.getRGB());
+                }else{
+                    result.setRGB(x,y,Color.WHITE.getRGB());
+                }
+
+            }
+        }
+
+        rightPanel.setModel(new ImageModel(result));
+        rightPanel.repaint();
+    }
+
+    public void gradientTlobiale() {
+        if (leftPanel.getModel() == null || leftPanel.getModel().getImage() == null) {
+            JOptionPane.showMessageDialog(mainFrame, "Brak załadowanego obrazu!", "Błąd", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        BufferedImage image = leftPanel.getModel().getCopyImage();
+        int width = image.getWidth();
+        int height = image.getHeight();
+        BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+        int[][] gx = {
+                {-1, 0, 1},
+                {-1, 0, 1},
+                {-1, 0, 1}
+        };
+
+        int[][] gy = {
+                {1, 1, 1},
+                {0, 0, 0},
+                {-1, -1, -1}
+        };
+
+        for (int y = 1; y < height - 1; y++) {
+            for (int x = 1; x < width - 1; x++) {
+                int sumRx = 0, sumGx = 0, sumBx = 0;
+                int sumRy = 0, sumGy = 0, sumBy = 0;
+                Color color = new Color(image.getRGB(x,y));
+                for (int i = -1; i <= 1; i++) {
+                    for (int j = -1; j <= 1; j++) {
+                        Color c = new Color(image.getRGB(x + j, y + i));
+
+                        sumRx += c.getRed()   * gx[i + 1][j + 1];
+                        sumGx += c.getGreen() * gx[i + 1][j + 1];
+                        sumBx += c.getBlue()  * gx[i + 1][j + 1];
+
+                        sumRy += c.getRed()   * gy[i + 1][j + 1];
+                        sumGy += c.getGreen() * gy[i + 1][j + 1];
+                        sumBy += c.getBlue()  * gy[i + 1][j + 1];
+                    }
+                }
+
+                int r = Math.min(255, Math.abs(sumRx) + Math.abs(sumRy));
+                int g = Math.min(255, Math.abs(sumGx) + Math.abs(sumGy));
+                int b = Math.min(255, Math.abs(sumBx) + Math.abs(sumBy));
+
+
+                int brightness = (r+b+g)/3;
+                if(brightness<60){
+                    result.setRGB(x, y, Color.WHITE.getRGB());
+                }else{
+                    result.setRGB(x,y,color.getRGB());
+                }
+
+            }
+        }
+
+        rightPanel.setModel(new ImageModel(result));
+        rightPanel.repaint();
+    }
+
+
+    public void gradientCzarnelinie() {
+        if (leftPanel.getModel() == null || leftPanel.getModel().getImage() == null) {
+            JOptionPane.showMessageDialog(mainFrame, "Brak załadowanego obrazu!", "Błąd", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        BufferedImage image = leftPanel.getModel().getCopyImage();
+        int width = image.getWidth();
+        int height = image.getHeight();
+        BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+        int[][] gx = {
+                {-1, 0, 1},
+                {-1, 0, 1},
+                {-1, 0, 1}
+        };
+
+        int[][] gy = {
+                {1, 1, 1},
+                {0, 0, 0},
+                {-1, -1, -1}
+        };
+
+        for (int y = 1; y < height - 1; y++) {
+            for (int x = 1; x < width - 1; x++) {
+                int sumRx = 0, sumGx = 0, sumBx = 0;
+                int sumRy = 0, sumGy = 0, sumBy = 0;
+                Color color = new Color(image.getRGB(x,y));
+                for (int i = -1; i <= 1; i++) {
+                    for (int j = -1; j <= 1; j++) {
+                        Color c = new Color(image.getRGB(x + j, y + i));
+
+                        sumRx += c.getRed()   * gx[i + 1][j + 1];
+                        sumGx += c.getGreen() * gx[i + 1][j + 1];
+                        sumBx += c.getBlue()  * gx[i + 1][j + 1];
+
+                        sumRy += c.getRed()   * gy[i + 1][j + 1];
+                        sumGy += c.getGreen() * gy[i + 1][j + 1];
+                        sumBy += c.getBlue()  * gy[i + 1][j + 1];
+                    }
+                }
+
+                int r = Math.min(255, Math.abs(sumRx) + Math.abs(sumRy));
+                int g = Math.min(255, Math.abs(sumGx) + Math.abs(sumGy));
+                int b = Math.min(255, Math.abs(sumBx) + Math.abs(sumBy));
+
+                Color newColor = new Color(r, g, b);
+                int brightness = (r+b+g)/3;
+                if(brightness>60){
+                    result.setRGB(x, y, Color.BLACK.getRGB());
+                }else{
+                    result.setRGB(x,y,color.getRGB());
+                }
+
+            }
+        }
+
+        rightPanel.setModel(new ImageModel(result));
+        rightPanel.repaint();
+    }
+
+    public void gradientOba() {
+        if (leftPanel.getModel() == null || leftPanel.getModel().getImage() == null) {
+            JOptionPane.showMessageDialog(mainFrame, "Brak załadowanego obrazu!", "Błąd", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        BufferedImage image = leftPanel.getModel().getCopyImage();
+        int width = image.getWidth();
+        int height = image.getHeight();
+        BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+        int[][] gx = {
+                {-1, 0, 1},
+                {-1, 0, 1},
+                {-1, 0, 1}
+        };
+
+        int[][] gy = {
+                {1, 1, 1},
+                {0, 0, 0},
+                {-1, -1, -1}
+        };
+
+        for (int y = 1; y < height - 1; y++) {
+            for (int x = 1; x < width - 1; x++) {
+                int sumRx = 0, sumGx = 0, sumBx = 0;
+                int sumRy = 0, sumGy = 0, sumBy = 0;
+                Color color = new Color(image.getRGB(x,y));
+                for (int i = -1; i <= 1; i++) {
+                    for (int j = -1; j <= 1; j++) {
+                        Color c = new Color(image.getRGB(x + j, y + i));
+
+                        sumRx += c.getRed()   * gx[i + 1][j + 1];
+                        sumGx += c.getGreen() * gx[i + 1][j + 1];
+                        sumBx += c.getBlue()  * gx[i + 1][j + 1];
+
+                        sumRy += c.getRed()   * gy[i + 1][j + 1];
+                        sumGy += c.getGreen() * gy[i + 1][j + 1];
+                        sumBy += c.getBlue()  * gy[i + 1][j + 1];
+                    }
+                }
+
+                int r = Math.min(255, Math.abs(sumRx) + Math.abs(sumRy));
+                int g = Math.min(255, Math.abs(sumGx) + Math.abs(sumGy));
+                int b = Math.min(255, Math.abs(sumBx) + Math.abs(sumBy));
+
+                Color newColor = new Color(r, g, b);
+                int brightness = (r+b+g)/3;
+                if(brightness>60){
+                    result.setRGB(x, y, Color.BLACK.getRGB());
+                }else{
+                    result.setRGB(x,y,Color.WHITE.getRGB());
+                }
+
+            }
+        }
+
+        rightPanel.setModel(new ImageModel(result));
+        rightPanel.repaint();
+    }
 
 
 }
